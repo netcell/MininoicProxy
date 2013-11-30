@@ -7,7 +7,7 @@ var options;
 
 function getProxyTable(){
 	options = {
-	  router: JSON.parse(fs.readFileSync(proxy_table));
+	  router: JSON.parse(fs.readFileSync(proxy_table)),
 	};
 }
 

@@ -10,12 +10,3 @@ var options = {
 
 var proxyServer = httpProxy.createServer(options);
 proxyServer.listen(8080);
-
-var options2 = {
-  router: {
-    'mysql.mininoic.com': '127.0.0.1:3306'
-  }
-}
-
-var proxyServer2 = httpProxy.createServer(options2);
-proxyServer2.listen(3306);

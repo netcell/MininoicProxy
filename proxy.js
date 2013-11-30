@@ -1,12 +1,29 @@
 var http = require('http'),
-    httpProxy = require('http-proxy');
+    httpProxy = require('http-proxy'),
+    fs = require('fs');
 
-var options = {
-  router: {
-    'amduonglich.mininoic.com': '127.0.0.1:5000',
-    'mininoic.com': '127.0.0.1:8000'
-  }
+var proxy_table = '../.proxy_table';
+var options;
+
+function getProxyTable(){
+	options = {
+	  router: JSON.parse(fs.readFileSync(proxy_table));
+	};
 }
 
-var proxyServer = httpProxy.createServer(options);
-proxyServer.listen(8080);
+getProxyTable();
+
+var proxyServer;
+
+function startServer(){
+	proxyServer = httpProxy.createServer(options);
+	proxyServer.listen(8080);
+}
+
+startServer();
+
+fs.watchFile(proxy_table, function(current, previous){
+	getProxyTable();
+	proxyServer.close();
+	startServer();
+})

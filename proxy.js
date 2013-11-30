@@ -4,7 +4,8 @@ var http = require('http'),
 var options = {
   router: {
     'amduonglich.mininoic.com': '127.0.0.1:5000',
-    'mininoic.com': '127.0.0.1:8000'
+    'mininoic.com': '127.0.0.1:8000',
+    'mysql.mininoic.com': '127.0.0.1:3306'
   }
 }
 

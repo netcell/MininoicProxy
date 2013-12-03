@@ -3,8 +3,9 @@ var http = require('http'),
     fs = require('fs'),
     connect = require('connect');
 
-var proxy_table = '~/.proxy_table';
-var static_table = '~/.static_table';
+var homepath = process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE;
+var proxy_table = homepath + '/.proxy_table';
+var static_table = homepath + '/.static_table';
 
 var proxy_server;
 

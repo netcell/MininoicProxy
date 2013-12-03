@@ -1,29 +1,56 @@
 var http = require('http'),
-    httpProxy = require('http-proxy'),
-    fs = require('fs');
+	httpProxy = require('http-proxy'),
+    fs = require('fs'),
+    connect = require('connect');
 
-var proxy_table = '../.proxy_table';
-var options;
+var proxy_table = '~/.proxy_table';
+var static_table = '~/.static_table';
 
-function getProxyTable(){
-	options = {
+var proxy_server;
+
+function get_proxy_table(proxy_table){
+	return {
 	  router: JSON.parse(fs.readFileSync(proxy_table)),
 	};
 }
 
-getProxyTable();
-
-var proxyServer;
-
-function startServer(){
-	proxyServer = httpProxy.createServer(options);
-	proxyServer.listen(8080);
+function start_proxy_server(){
+	var options = get_proxy_table(proxy_table);
+	proxy_server.close = proxy_server.close || function(){};
+	proxy_server.close();
+	proxy_server = httpProxy.createServer(options);
+	proxy_server.listen(8080);
 }
 
-startServer();
+start_proxy_server();
+fs.watchFile(proxy_table, start_proxy_server)
 
-fs.watchFile(proxy_table, function(current, previous){
-	getProxyTable();
-	proxyServer.close();
-	startServer();
-})
+function get_static_table(static_table){
+	return JSON.parse(fs.readFileSync(static_table));
+}
+
+function start_a_static_server(options){
+    var static_server = connect();
+    var paths = options.paths
+    for (var i = paths.length - 1; i >= 0; i--) {
+    	static_server.use( connect.static(paths[i]) )
+    }
+    return http.createServer(app).listen(options.port);
+}
+
+var static_servers = [];
+
+function start_static_servers(){
+	for (var i = startic_servers.length - 1; i >= 0; i--) {
+		startic_servers[i].close = startic_servers[i].close || function(){};
+		startic_servers[i].close();
+	};
+	static_servers = [];
+	var list = get_static_table(static_table);
+	for (var i = list.length - 1; i >= 0; i--) {
+		startic_servers.push(start_a_static_server(list[i]));
+	};
+}
+
+start_static_servers();
+fs.watchFile(static_table, start_static_servers);

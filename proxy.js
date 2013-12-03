@@ -32,9 +32,8 @@ function get_static_table(static_table){
 	return JSON.parse(fs.readFileSync(static_table));
 }
 
-function start_a_static_server(options){
+function start_a_static_server(port,paths){
     var static_server = connect();
-    var paths = options.paths;
     for (var i = paths.length - 1; i >= 0; i--) {
     	var path = paths[i];
     	switch (path[i]) {
@@ -43,7 +42,7 @@ function start_a_static_server(options){
     	}
     	static_server.use( connect.static( path ) );
     }
-    return http.createServer(app).listen(options.port);
+    return http.createServer(app).listen(port);
 }
 
 var static_servers = [];
@@ -54,9 +53,9 @@ function start_static_servers(){
 		static_servers[i].close();
 	};
 	static_servers = [];
-	var list = get_static_table(static_table);
-	for (var i = list.length - 1; i >= 0; i--) {
-		static_servers.push(start_a_static_server(list[i]));
+	var table = get_static_table(static_table);
+	for (port in table) {
+		static_servers.push(start_a_static_server(port,table[port]));
 	};
 }
 

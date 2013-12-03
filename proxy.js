@@ -7,7 +7,7 @@ var homepath = process.env.HOME || process.env.HOMEPATH || process.env.USERPROFI
 var proxy_table = homepath + '/.proxy_table';
 var static_table = homepath + '/.static_table';
 
-var proxy_server;
+var proxy_server = {};
 
 function get_proxy_table(proxy_table){
 	return {

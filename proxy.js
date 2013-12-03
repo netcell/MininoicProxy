@@ -20,6 +20,7 @@ function get_proxy_table(proxy_table){
 function start_proxy_server(){
 	var options = get_proxy_table(proxy_table);
 	proxy_server.close = proxy_server.close || function(){};
+	console.log(proxy_server.close);
 	proxy_server.close();
 	proxy_server = httpProxy.createServer(options);
 	proxy_server.listen(8080);

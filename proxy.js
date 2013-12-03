@@ -42,14 +42,14 @@ function start_a_static_server(options){
 var static_servers = [];
 
 function start_static_servers(){
-	for (var i = startic_servers.length - 1; i >= 0; i--) {
-		startic_servers[i].close = startic_servers[i].close || function(){};
-		startic_servers[i].close();
+	for (var i = static_servers.length - 1; i >= 0; i--) {
+		static_servers[i].close = static_servers[i].close || function(){};
+		static_servers[i].close();
 	};
 	static_servers = [];
 	var list = get_static_table(static_table);
 	for (var i = list.length - 1; i >= 0; i--) {
-		startic_servers.push(start_a_static_server(list[i]));
+		static_servers.push(start_a_static_server(list[i]));
 	};
 }
 

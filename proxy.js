@@ -10,9 +10,11 @@ var static_table = homepath + '/.static_table';
 var proxy_server = {};
 
 function get_proxy_table(proxy_table){
-	return {
-	  router: JSON.parse(fs.readFileSync(proxy_table)),
+	var rs = JSON.parse(fs.readFileSync(proxy_table));
+	for (r in rs) {
+		rs[r] = "127.0.0.1:"+ rs[r]
 	};
+	return { router: rs };
 }
 
 function start_proxy_server(){
@@ -24,7 +26,7 @@ function start_proxy_server(){
 }
 
 start_proxy_server();
-fs.watchFile(proxy_table, start_proxy_server)
+fs.watchFile(proxy_table, start_proxy_server);
 
 function get_static_table(static_table){
 	return JSON.parse(fs.readFileSync(static_table));
@@ -32,9 +34,14 @@ function get_static_table(static_table){
 
 function start_a_static_server(options){
     var static_server = connect();
-    var paths = options.paths
+    var paths = options.paths;
     for (var i = paths.length - 1; i >= 0; i--) {
-    	static_server.use( connect.static(paths[i]) )
+    	var path = paths[i];
+    	switch (path[i]) {
+    		case '~': path = homepath + path.substring(1); break;
+    		case '.': path = __dirname + path.substring(1); break;
+    	}
+    	static_server.use( connect.static( path ) );
     }
     return http.createServer(app).listen(options.port);
 }

@@ -18,12 +18,13 @@ function get_proxy_table(proxy_table){
 }
 
 function start_proxy_server(){
-	var options = get_proxy_table(proxy_table);
-	proxy_server.close = proxy_server.close || function(){};
-	console.log(proxy_server.close);
-	proxy_server.close();
-	proxy_server = httpProxy.createServer(options);
-	proxy_server.listen(8080);
+	try {
+		var options = get_proxy_table(proxy_table);
+		proxy_server.close = proxy_server.close || function(){};
+		proxy_server.close();
+		proxy_server = httpProxy.createServer(options);
+		proxy_server.listen(8080);	
+	}
 }
 
 start_proxy_server();
@@ -49,15 +50,17 @@ function start_a_static_server(port,paths){
 var static_servers = [];
 
 function start_static_servers(){
-	for (var i = static_servers.length - 1; i >= 0; i--) {
-		static_servers[i].close = static_servers[i].close || function(){};
-		static_servers[i].close();
-	};
-	static_servers = [];
-	var table = get_static_table(static_table);
-	for (port in table) {
-		static_servers.push(start_a_static_server(port,table[port]));
-	};
+	try {
+		static_servers = [];
+		var table = get_static_table(static_table);
+		for (var i = static_servers.length - 1; i >= 0; i--) {
+			static_servers[i].close = static_servers[i].close || function(){};
+			static_servers[i].close();
+		};
+		for (port in table) {
+			static_servers.push(start_a_static_server(port,table[port]));
+		};
+	}
 }
 
 start_static_servers();

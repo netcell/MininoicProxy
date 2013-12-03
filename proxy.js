@@ -42,7 +42,7 @@ function start_a_static_server(port,paths){
     	}
     	static_server.use( connect.static( path ) );
     }
-    return http.createServer(app).listen(port);
+    return http.createServer(static_server).listen(port);
 }
 
 var static_servers = [];

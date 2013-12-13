@@ -1,7 +1,8 @@
 var http = require('http'),
 	httpProxy = require('http-proxy'),
     fs = require('fs'),
-    connect = require('connect');
+    connect = require('connect'),
+    uphook = require('uphook');
 
 var homepath = process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE;
 var proxy_table = homepath + '/.proxy_table';
@@ -25,6 +26,7 @@ function start_proxy_server(){
 		proxy_server.close = proxy_server.close || function(){};
 		proxy_server.close();
 		proxy_server = httpProxy.createServer(options);
+		proxy_server.use(uphook('github.mininoic.com/mininoicproxy', { branch: 'master', cmd: "echo 'a'" }));
 		proxy_server.listen(8080);
 	} catch (e){
 

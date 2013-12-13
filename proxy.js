@@ -26,9 +26,7 @@ function start_proxy_server(){
 		options = get_proxy_table(proxy_table);
 		proxy_server.close = proxy_server.close || function(){};
 		proxy_server.close();
-		proxy_server = httpProxy.createServer(options);
-		proxy_server.use(uphook('github.mininoic.com/mininoicproxy', { branch: 'master', cmd: "echo 'a'" }));
-		proxy_server.listen(8080);
+		proxy_server = httpProxy.createServer(options);proxy_server.listen(8080);
 	} catch (e){
 		console.log(e);
 	}

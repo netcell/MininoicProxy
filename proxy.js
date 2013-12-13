@@ -2,7 +2,7 @@ var http = require('http'),
 	httpProxy = require('http-proxy'),
     fs = require('fs'),
     connect = require('connect'),
-    uphook = require('uphook');
+    uphook = require('up-hook');
 
 var homepath = process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE;
 var proxy_table = homepath + '/.proxy_table';

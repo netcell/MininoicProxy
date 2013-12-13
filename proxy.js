@@ -21,6 +21,7 @@ function start_proxy_server(){
 	var options
 	try {
 		options = get_proxy_table(proxy_table);
+		console.log(options.router);
 		proxy_server.close = proxy_server.close || function(){};
 		proxy_server.close();
 		proxy_server = httpProxy.createServer(options);
@@ -68,7 +69,7 @@ function start_static_servers(){
 			};
 		};
 	} catch (e) {
-		
+
 	}
 }
 

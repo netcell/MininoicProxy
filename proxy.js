@@ -1,7 +1,8 @@
 var http = require('http'),
 	httpProxy = require('http-proxy'),
     fs = require('fs'),
-    connect = require('connect');
+    connect = require('connect'),
+    express = require('express');
 
 var homepath = process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE;
 var proxy_table = homepath + '/.proxy_table';
@@ -42,17 +43,28 @@ function get_static_table(static_table){
 	return JSON.parse(fs.readFileSync(static_table));
 }
 
-function start_a_static_server(port,paths){
-    var static_server = connect();
+function start_a_static_server(port,p){
+    var static_server = express();
+    var paths;
+    if (Object.prototype.toString.call( p ) !== '[object Array]') {
+	try {
+        	//static_server.use(require('prerender-node').set('prerenderToken', p.prerenderToken));
+        	paths = p.paths;
+	} catch (e) {
+		console.log('TA-'+e);
+	}
+    } else {
+    	paths = p;
+    }
     for (var i = paths.length - 1; i >= 0; i--) {
     	var path = paths[i];
     	switch (path[i]) {
     		case '~': path = homepath + path.substring(1); break;
     		case '.': path = __dirname + path.substring(1); break;
     	}
-    	static_server.use( connect.static( path ) );
+    	static_server.use( express.static( path ) );
     }
-    return http.createServer(static_server).listen(port);
+    return static_server.listen(port);
 }
 
 var static_servers = [];

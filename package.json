@@ -7,5 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Mininoic",
-  "license": "BSD"
+  "license": "BSD",
+  "dependencies": {
+    "prerender-node": "^1.0.1"
+  }
 }
